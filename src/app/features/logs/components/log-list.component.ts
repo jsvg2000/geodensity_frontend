@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { EditLogDialogComponent } from './edit-log-dialog.component';
 
 @Component({
   selector: 'app-log-list',
@@ -83,5 +84,20 @@ export class LogListComponent implements OnInit {
     const end = new Date(endDate).toISOString().split('T')[0];
 
     this.store.dispatch(LogsActions.getLogs({ startDate: start, endDate: end }));
+  }
+
+  onEditUsername(log: LogEntry) {
+    const dialogRef = this.dialog.open(EditLogDialogComponent, {
+      width: '400px',
+      data: log,
+    });
+
+    dialogRef.afterClosed().subscribe((newUsername: string | null) => {
+      if (newUsername && newUsername !== log.username) {
+        this.store.dispatch(
+          LogsActions.updateLogUsername({ id: log.id, username: newUsername })
+        );
+      }
+    });
   }
 }
