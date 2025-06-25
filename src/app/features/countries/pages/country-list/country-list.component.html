@@ -1,0 +1,60 @@
+<div class="log-button-container">
+  <button mat-raised-button color="primary" [routerLink]="['/logs']">
+    Ver Logs
+    <mat-icon class="icon-right">history</mat-icon>
+  </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+  <label>
+    Nombre de usuario:
+    <input formControlName="username" />
+  </label>
+  <div *ngIf="form.controls['username'].invalid && form.controls['username'].touched" class="error">
+    El nombre es requerido
+  </div>
+
+  <label>
+    Número de países a consultar:
+    <input type="number" formControlName="numberOfCountries" />
+  </label>
+  <div *ngIf="form.controls['numberOfCountries'].invalid && form.controls['numberOfCountries'].touched" class="error">
+    Debe ser entre 1 y 50
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Consultar</button>
+</form>
+
+<div *ngIf="loading$ | async" class="loading">Cargando países...</div>
+<div *ngIf="error$ | async as error" class="error">{{ error }}</div>
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 country-table">
+    <!-- Columnas -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+      <td mat-cell *matCellDef="let country">{{ country.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="population">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Población</th>
+      <td mat-cell *matCellDef="let country">{{ country.population | number }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="area">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Área</th>
+      <td mat-cell *matCellDef="let country">{{ country.area | number }} km²</td>
+    </ng-container>
+
+    <ng-container matColumnDef="density">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Densidad</th>
+      <td mat-cell *matCellDef="let country">{{ country.density | number:'1.1-1' }}</td>
+    </ng-container>
+
+    <!-- Encabezado y filas -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+</div>
