@@ -1,59 +1,82 @@
-# GeodensityFrontend
+# Frontend - Angular 22 | Proyecto FullStack con GraphQL
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.3.
+Este proyecto es la interfaz de usuario construida con **Angular 22** que consume una API GraphQL desde un backend Laravel. Permite visualizar y gestionar logs que incluyen datos de usuarios y países consultados.
 
-## Development server
+## 📦 Requisitos previos
 
-To start a local development server, run:
+Antes de instalar y ejecutar este proyecto, asegúrate de tener instalado lo siguiente:
 
-```bash
+- [Node.js](https://nodejs.org/) (versión 18 o superior recomendada)
+- [Angular CLI](https://angular.io/cli) versión 17 o superior (compatible con Angular 22)
+- [Git](https://git-scm.com/)
+- Acceso al backend Laravel con el endpoint GraphQL en funcionamiento
+
+# Instalación
+
+1. Clona el repositorio:
+   git clone https://github.com/jsvg2000/geodensity_frontend.git
+   cd geodensity_frontend
+2. Instala las dependencias del proyecto:
+   npm install
+
+# Ejecución en desarrollo
+
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+# Estructura del proyecto y Arquitectura del Proyecto
 
-## Code scaffolding
+1. Este frontend se conecta a un backend Laravel con GraphQL. Asegúrate de que el backend esté en funcionamiento y accesible desde el frontend.
+2. El proyecto frontend ha sido construido usando Angular 22 y está organizado siguiendo una arquitectura modular basada en características (feature-based architecture), promoviendo el principio de separación de responsabilidades y facilitando la escalabilidad, mantenibilidad y reutilización de código.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+src/
+├── app/
+│ ├── core/ # Servicios, interceptores y configuración global
+│ ├── shared/ # Componentes, directivas y pipes reutilizables
+│ └── features/
+│ ├── countries/ # Módulo de gestión de países
+│ │ ├── pages/ # Vistas específicas
+│ │ ├── services/ # Lógica de negocio y consumo de GraphQL
+│ │ └── store/ # Estado manejado con NGXS
+│ └── logs/ # Módulo de gestión de logs
+│ ├── pages/
+│ ├── services/
+│ └── store/
+├── assets/
+└── environments/
 
-```bash
-ng generate component component-name
-```
+# Decisiones Técnicas
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1.  Arquitectura Modular basada en Features
+    Se ha optado por separar los dominios del negocio (countries, logs) en módulos independientes bajo app/features. Cada uno contiene sus propias pages, services y store, fomentando el aislamiento y la independencia de cada funcionalidad.
 
-```bash
-ng generate --help
-```
+2.  Consumo de API GraphQL
+    Para la comunicación con el backend Laravel, se emplea Apollo Angular como cliente GraphQL, lo que permite una integración declarativa y eficiente con los datos. Las queries y mutations están centralizadas en los servicios de cada feature.
 
-## Building
+3.  Manejo de estado con NGXS
+    Se utilizó NGXS como solución para manejo de estado global y local de cada feature. Algunas razones clave para su elección:
 
-To build the project run:
+. Sintaxis sencilla y orientada a clases (TypeScript-friendly)
+. Integración limpia con Angular
+. Compatibilidad con inyección de dependencias
+. Middleware y plugins disponibles para logging, devtools, persistencia, etc.
+. Cada feature contiene su propio store/ con:
+. Acciones (_.actions.ts)
+. Estados (_.state.ts)
+. Selectores (\*.selectors.ts)
+. Esto permite una mejor trazabilidad de los datos, flujo claro de eventos y facilita pruebas unitarias.
 
-```bash
-ng build
-```
+4.  Componentes reutilizables
+    Los componentes genéricos, estilos y utilidades comunes se ubican en el módulo shared/, lo que permite su uso en cualquier parte de la aplicación sin duplicar código.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+5.  Environments y configuración
+    El proyecto define distintos entornos en src/environments, con variables específicas como la URL del endpoint GraphQL, lo cual permite desplegar fácilmente en desarrollo, staging o producción.
 
-## Running unit tests
+# Ventajas de esta arquitectura
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Escalabilidad: fácilmente se pueden agregar nuevos módulos sin interferir con otros existentes.
 
-```bash
-ng test
-```
+Testabilidad: cada feature puede ser probado de forma aislada.
 
-## Running end-to-end tests
+Mantenibilidad: los cambios se pueden acotar a módulos específicos.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Claridad en el flujo de datos: gracias a NGXS, el estado se gestiona de forma predecible y centralizada.
