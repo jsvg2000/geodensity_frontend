@@ -1,0 +1,71 @@
+.form-filtro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #f9f9f9;
+
+  .campo-fecha {
+    flex: 1 1 200px;
+    min-width: 200px;
+  }
+
+  .boton-buscar {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+}
+
+.cargando, .error {
+  margin: 1rem 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #444;
+}
+
+.tabla-container {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.custom-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    background-color: #1976d2;
+    color: white;
+  }
+
+  td, th {
+    padding: 0.75rem 1rem;
+  }
+
+  mat-icon-button {
+    transition: 0.3s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.toolbar-navegacion {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+
+  button {
+    gap: 0.4rem;
+    display: flex;
+    align-items: center;
+  }
+}

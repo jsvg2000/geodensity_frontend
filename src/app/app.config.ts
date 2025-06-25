@@ -10,6 +10,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
+import { logsReducer } from './features/logs/store/logs.reducer';
+import { LogsEffects } from './features/logs/store/logs.effects';
 
 
 export const appConfig: ApplicationConfig = {
@@ -17,9 +19,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideStore({ 
-      countries: countriesReducer
+      countries: countriesReducer,
+      logs: logsReducer
     }),
-    provideEffects([CountriesEffects]),
+    provideEffects([CountriesEffects, LogsEffects]),
 
     provideStoreDevtools(), provideHttpClient(), provideApollo(() => {
       const httpLink = inject(HttpLink);

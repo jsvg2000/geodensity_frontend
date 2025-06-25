@@ -1,0 +1,78 @@
+
+<div class="toolbar-navegacion">
+  <button mat-flat-button color="primary" [routerLink]="['/countries']">
+    <mat-icon>public</mat-icon>
+    Ir a Países
+  </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-filtro mat-elevation-z2">
+  <mat-form-field appearance="outline" class="campo-fecha">
+    <mat-label>Fecha inicio</mat-label>
+    <input matInput [matDatepicker]="picker1" formControlName="startDate" />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="campo-fecha">
+    <mat-label>Fecha fin</mat-label>
+    <input matInput [matDatepicker]="picker2" formControlName="endDate" />
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" class="boton-buscar" type="submit" [disabled]="form.invalid">
+    <mat-icon>search</mat-icon>
+    Buscar Logs
+  </button>
+</form>
+
+<div *ngIf="loading$ | async" class="cargando">
+  <mat-icon>hourglass_empty</mat-icon> Cargando logs...
+</div>
+
+<div *ngIf="error$ | async as error" class="error">
+  <mat-icon color="warn">error</mat-icon> {{ error }}
+</div>
+
+<div class="tabla-container mat-elevation-z4">
+  <table mat-table [dataSource]="dataSource" class="custom-table" matSort>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let log">{{ log.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+      <td mat-cell *matCellDef="let log">{{ log.username }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="num">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header># Países</th>
+      <td mat-cell *matCellDef="let log">{{ log.num_countries_returned }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef>Detalle</th>
+      <td mat-cell *matCellDef="let log">{{ log.countries_details }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="created_at">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let log">{{ log.created_at | date: 'mediumDate' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let log">
+        options
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+</div>
