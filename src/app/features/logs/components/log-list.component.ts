@@ -21,6 +21,7 @@ import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { EditLogDialogComponent } from './edit-log-dialog.component';
+import { DeleteLogDialogComponent } from './delete/delete-log-dialog.component';
 
 @Component({
   selector: 'app-log-list',
@@ -97,6 +98,18 @@ export class LogListComponent implements OnInit {
         this.store.dispatch(
           LogsActions.updateLogUsername({ id: log.id, username: newUsername })
         );
+      }
+    });
+  }
+  onDelete(log: LogEntry) {
+    const dialogRef = this.dialog.open(DeleteLogDialogComponent, {
+      width: '400px',
+      data: log,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmDelete: boolean) => {
+      if (confirmDelete) {
+        this.store.dispatch(LogsActions.deleteLog({ id: log.id }));
       }
     });
   }
